@@ -1,0 +1,38 @@
+name: Alonso Mena Demo
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-on-windows:
+    runs-on: self-hosted
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🏗️ Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: 🖥️ Display Windows Version
+        run: systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
+      - name: ✅ Run a Sample PowerShell Command
+        run: Write-Host "Hello from Windows GitHub Actions! 🎉"
+
+      - name: 🔎 Check Installed Programs
+        run: Get-Command python, node, npm, git
+        shell: powershell
+
+      - name: 🏗️ Run a Simple Batch Script
+        run: |
+          echo Running a Batch Script on Windows
+          dir
+        shell: cmd
