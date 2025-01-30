@@ -1,0 +1,38 @@
+name: Capture Screenshot in Windows
+
+on: [push, pull_request]
+
+jobs:
+  screenshot:
+    runs-on: self-hosted
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 📸 Take Screenshot with PowerShell
+        shell: powershell
+        run: |
+          Add-Type -TypeDefinition @"
+          using System;
+          using System.Drawing;
+          using System.Drawing.Imaging;
+          using System.Windows.Forms;
+
+          public class ScreenCapture {
+              public static void CaptureScreen(string filePath) {
+                  Bitmap bmp = new Bitmap(Screen.PrimaryScreen.Bounds.Width, Screen.PrimaryScreen.Bounds.Height);
+                  Graphics g = Graphics.FromImage(bmp);
+                  g.CopyFromScreen(0, 0, 0, 0, bmp.Size);
+                  bmp.Save(filePath, ImageFormat.Png);
+              }
+          }
+          "@ -Language CSharp
+
+          [ScreenCapture]::CaptureScreen("${{ github.workspace }}\screenshot.png")
+
+      - name: ⬆️ Upload Screenshot as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: screenshot
+          path: ${{ github.workspace }}/screenshot.png
