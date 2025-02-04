@@ -10,6 +10,8 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Setup PowerShell
-        run: C:\Users\usuario\Downloads\snyk-win.exe code test
+        shell: pwsh
+        run: |
+          & "C:\Users\usuario\Downloads\snyk-win.exe" code test
         env:
-          SNYK_TOKEN: ${{secrets.SNYK_TOKEN}}
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
