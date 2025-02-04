@@ -1,0 +1,18 @@
+name: Windows Self-Hosted Runner Demo
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: self-hosted  # Runs on a self-hosted Windows runner
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup PowerShell
+        run: echo "Running on self-hosted Windows runner"
+
+      - name: Run a sample script
+        run: |
+          echo "Hello from Windows!"
+          dir
